@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM To-Do List</title>
+
+    <!-- =======================
+         INTERNAL CSS (UI DESIGN)
+         ======================= -->
+    <style>
+        /* Reset default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Page background */
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main app container */
+        .todo-app {
+            background: white;
+            width: 350px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* App title */
+        .todo-app h1 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        /* Input section */
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .input-group button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+        }
+
+        .input-group button:hover {
+            background: #5563d6;
+        }
+
+        /* Task list */
+        ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        /* Single task item */
+        li {
+            background: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Completed task style */
+        li.completed span {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        /* Buttons inside task */
+        .actions button {
+            margin-left: 5px;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .complete-btn {
+            background: #4caf50;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =======================
+         HTML STRUCTURE
+         ======================= -->
+    <div class="todo-app">
+        <h1>To-Do List</h1>
+
+        <!-- Input area -->
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Enter a task">
+            <button id="addBtn">Add</button>
+        </div>
+
+        <!-- Task list -->
+        <ul id="taskList"></ul>
+    </div>
+
+
+    <!-- =======================
+         INTERNAL JAVASCRIPT
+         ======================= -->
+    <script>
+        /*
+            STEP 1: SELECT DOM ELEMENTS
+            --------------------------
+            We first grab elements from HTML
+            so JavaScript can control them.
+        */
+
+        const taskInput = document.getElementById("taskInput");
+        const addBtn = document.getElementById("addBtn");
+        const taskList = document.getElementById("taskList");
+
+
+        /*
+            STEP 2: ADD EVENT LISTENER
+            -------------------------
+            When user clicks "Add",
+            we run a function.
+        */
+
+        addBtn.addEventListener("click", addTask);
+
+
+        /*
+            STEP 3: MAIN FUNCTION
+            --------------------
+            This function:
+            - Reads input value
+            - Creates a task
+            - Adds it to the DOM
+        */
+
+        function addTask() {
+            const taskText = taskInput.value.trim();
+
+            // Prevent empty tasks
+            if (taskText === "") {
+                alert("Please enter a task");
+                return;
+            }
+
+            /*
+                STEP 4: CREATE ELEMENTS
+                ----------------------
+                We create new HTML elements
+                using JavaScript.
+            */
+
+            const li = document.createElement("li");
+            const span = document.createElement("span");
+            const actionsDiv = document.createElement("div");
+
+            span.textContent = taskText;
+            actionsDiv.classList.add("actions");
+
+            /*
+                STEP 5: CREATE BUTTONS
+            */
+
+            const completeBtn = document.createElement("button");
+            completeBtn.textContent = "✔";
+            completeBtn.classList.add("complete-btn");
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "✖";
+            deleteBtn.classList.add("delete-btn");
+
+            /*
+                STEP 6: BUTTON FUNCTIONALITY
+                ----------------------------
+            */
+
+            // Mark task as complete
+            completeBtn.addEventListener("click", function () {
+                li.classList.toggle("completed");
+            });
+
+            // Delete task
+            deleteBtn.addEventListener("click", function () {
+                li.remove();
+            });
+
+            /*
+                STEP 7: APPEND ELEMENTS
+                ----------------------
+            */
+
+            actionsDiv.appendChild(completeBtn);
+            actionsDiv.appendChild(deleteBtn);
+
+            li.appendChild(span);
+            li.appendChild(actionsDiv);
+
+            taskList.appendChild(li);
+
+            /*
+                STEP 8: CLEAR INPUT
+            */
+
+            taskInput.value = "";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DOM in JavaScript – Basics</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+    h1, h2, h3 {
+      color: #333;
+    }
+    code {
+      background: #eee;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .box {
+      padding: 15px;
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #4f46e5;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Understanding the DOM in JavaScript</h1>
+
+  <div class="box">
+    <h2>What is the DOM?</h2>
+    <p>
+      DOM stands for <strong>Document Object Model</strong>. It is a programming interface
+      that represents an HTML document as a <strong>tree of objects</strong>.
+      JavaScript uses the DOM to <strong>access, change, add, or remove</strong>
+      elements on a web page.
+    </p>
+    <p>
+      When a browser loads an HTML page, it converts the HTML into the DOM.
+    </p>
+  </div>
+
+  <div class="box">
+    <h2>DOM Tree Structure</h2>
+    <p>
+      Every HTML element becomes a <strong>node</strong> in the DOM tree.
+    </p>
+    <ul>
+      <li><code>document</code> – the root of the DOM</li>
+      <li><code>html</code> – child of document</li>
+      <li><code>head</code> and <code>body</code> – children of html</li>
+      <li>Elements, text, and attributes – nodes inside body</li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <h2>Why We Use the DOM</h2>
+    <ul>
+      <li>Change text and HTML content</li>
+      <li>Change CSS styles</li>
+      <li>Respond to user events (clicks, typing, etc.)</li>
+      <li>Create interactive web pages</li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <h2>Selecting DOM Elements</h2>
+    <p>Common ways to select elements:</p>
+    <ul>
+      <li><code>document.getElementById()</code></li>
+      <li><code>document.getElementsByClassName()</code></li>
+      <li><code>document.getElementsByTagName()</code></li>
+      <li><code>document.querySelector()</code></li>
+      <li><code>document.querySelectorAll()</code></li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <h2>Example Using Internal JavaScript</h2>
+    <p id="text">This text will change when you click the button.</p>
+    <button onmouseleave="changeText()">Click Me</button>
+  </div>
+
+  <div class="box">
+    <h2>What is Internal JavaScript?</h2>
+    <p>
+      Internal JavaScript is written <strong>inside the HTML file</strong>
+      using the <code>&lt;script&gt;</code> tag.
+    </p>
+    <p>
+      It is usually placed at the <strong>end of the body</strong>
+      so the HTML loads before JavaScript runs.
+    </p>
+  </div>
+
+  <!-- Internal JavaScript -->
+  <script>
+    // Selecting an element using its ID
+    const paragraph = document.getElementById("text");
+
+    // Function to change text using DOM
+    function changeText() {
+      paragraph.textContent += "The DOM changed this text using internal JavaScript!";
+      paragraph.style.color = "green";
+      paragraph.style.fontWeight = "bold";
+    }
+  </script>
+
+</body>
+</html>
