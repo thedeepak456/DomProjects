@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Validation</title>
+
+    <!-- =======================
+         INTERNAL CSS (UI DESIGN)
+         ======================= -->
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Form card */
+        .form-card {
+            background: white;
+            width: 350px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .form-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Form group */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        /* Error message */
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Input error state */
+        .form-group.invalid input {
+            border-color: red;
+        }
+
+        /* Submit button */
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #667eea;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =======================
+         HTML STRUCTURE
+         ======================= -->
+    <form class="form-card" id="signupForm">
+        <h2>Sign Up</h2>
+
+        <div class="form-group" id="nameGroup">
+            <label>Name</label>
+            <input type="text" id="name">
+            <div class="error">Name is required</div>
+        </div>
+
+        <div class="form-group" id="emailGroup">
+            <label>Email</label>
+            <input type="email" id="email">
+            <div class="error">Enter a valid email</div>
+        </div>
+
+        <div class="form-group" id="passwordGroup">
+            <label>Password</label>
+            <input type="password" id="password">
+            <div class="error">Minimum 6 characters</div>
+        </div>
+
+        <button type="submit" id="submitBtn">Create Account</button>
+    </form>
+
+
+    <!-- =======================
+         INTERNAL JAVASCRIPT
+         ======================= -->
+    <script>
+        /*
+            STEP 1: SELECT DOM ELEMENTS
+            --------------------------
+        */
+
+        const form = document.getElementById("signupForm");
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const submitBtn = document.getElementById("submitBtn");
+
+
+        /*
+            STEP 2: HELPER FUNCTIONS
+            -----------------------
+        */
+
+        function showError(group, message) {
+            group.classList.add("invalid");
+            group.querySelector(".error").textContent = message;
+            group.querySelector(".error").style.display = "block";
+        }
+
+        function clearError(group) {
+            group.classList.remove("invalid");
+            group.querySelector(".error").style.display = "none";
+        }
+
+
+        /*
+            STEP 3: VALIDATION FUNCTIONS
+            ----------------------------
+        */
+
+        function validateName() {
+            if (nameInput.value.trim() === "") {
+                showError(nameInput.parentElement, "Name is required");
+                return false;
+            }
+            clearError(nameInput.parentElement);
+            return true;
+        }
+
+        function validateEmail() {
+            const emailValue = emailInput.value.trim();
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+            if (!emailPattern.test(emailValue)) {
+                showError(emailInput.parentElement, "Enter a valid email");
+                return false;
+            }
+            clearError(emailInput.parentElement);
+            return true;
+        }
+
+        function validatePassword() {
+            if (passwordInput.value.length < 6) {
+                showError(passwordInput.parentElement, "Minimum 6 characters");
+                return false;
+            }
+            clearError(passwordInput.parentElement);
+            return true;
+        }
+
+
+        /*
+            STEP 4: REAL-TIME VALIDATION
+            ----------------------------
+        */
+
+        nameInput.addEventListener("input", validateName);
+        emailInput.addEventListener("input", validateEmail);
+        passwordInput.addEventListener("input", validatePassword);
+
+
+        /*
+            STEP 5: FORM SUBMIT
+            ------------------
+        */
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Stop page refresh
+
+            const isNameValid = validateName();
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+
+            if (isNameValid && isEmailValid && isPasswordValid) {
+                alert("Form submitted successfully 🎉");
+                form.reset();
+            }
+        });
+    </script>
+
+</body>
+</html>

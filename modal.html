@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modal Popup</title>
+
+    <!-- =======================
+         INTERNAL CSS (UI DESIGN)
+         ======================= -->
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Open modal button */
+        .open-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .open-btn:hover {
+            background: #5563d6;
+        }
+
+        /* =======================
+           MODAL STYLES
+           ======================= */
+
+        /* Overlay (background blur) */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: none; /* hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Show modal */
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* Modal box */
+        .modal {
+            background: white;
+            width: 320px;
+            padding: 20px;
+            border-radius: 12px;
+            position: relative;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal h2 {
+            margin-bottom: 10px;
+        }
+
+        .modal p {
+            font-size: 14px;
+            color: gray;
+        }
+
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            border: none;
+            background: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =======================
+         HTML STRUCTURE
+         ======================= -->
+    <button class="open-btn" id="openModal">Open Modal</button>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+
+        <!-- Modal Content -->
+        <div class="modal" id="modalBox">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <h2>Hello Student 👋</h2>
+            <p>
+                This is a modal popup.<br>
+                Click outside, press ESC, or click ❌ to close.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- =======================
+         INTERNAL JAVASCRIPT
+         ======================= -->
+    <script>
+        /*
+            STEP 1: SELECT DOM ELEMENTS
+            --------------------------
+        */
+
+        const openBtn = document.getElementById("openModal");
+        const closeBtn = document.getElementById("closeModal");
+        const overlay = document.getElementById("modalOverlay");
+        const modal = document.getElementById("modalBox");
+
+
+        /*
+            STEP 2: OPEN MODAL
+            -----------------
+        */
+
+        openBtn.addEventListener("click", function () {
+            overlay.classList.add("active");
+        });
+
+
+        /*
+            STEP 3: CLOSE MODAL (BUTTON)
+            ----------------------------
+        */
+
+        closeBtn.addEventListener("click", function () {
+            overlay.classList.remove("active");
+        });
+
+
+        /*
+            STEP 4: CLOSE MODAL (CLICK OUTSIDE)
+            ----------------------------------
+            Important DOM concept:
+            Event bubbling
+        */
+
+        overlay.addEventListener("click", function () {
+            overlay.classList.remove("active");
+        });
+
+        // Prevent closing when clicking inside modal
+        modal.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+
+
+        /*
+            STEP 5: CLOSE MODAL (ESC KEY)
+            ----------------------------
+        */
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                overlay.classList.remove("active");
+            }
+        });
+    </script>
+
+</body>
+</html>

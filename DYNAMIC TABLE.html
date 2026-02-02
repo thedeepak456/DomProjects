@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Table</title>
+
+    <!-- =======================
+         INTERNAL CSS (UI)
+         ======================= -->
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .table-card {
+            background: white;
+            width: 420px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        /* Search input */
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Buttons */
+        button {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #f44336;
+            color: white;
+        }
+
+        .add-btn {
+            background: #4caf50;
+            width: 100%;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =======================
+         HTML STRUCTURE
+         ======================= -->
+    <div class="table-card">
+        <h2>Student List</h2>
+
+        <!-- Search -->
+        <input type="text" id="searchInput" placeholder="Search student...">
+
+        <!-- Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Rows added by JS -->
+            </tbody>
+        </table>
+
+        <!-- Add new student -->
+        <input type="text" id="nameInput" placeholder="Enter student name">
+        <button class="add-btn" id="addBtn">Add Student</button>
+    </div>
+
+    <!-- =======================
+         INTERNAL JAVASCRIPT
+         ======================= -->
+    <script>
+        /*
+            STEP 1: DATA (SOURCE OF TRUTH)
+            ------------------------------
+            UI will be created from this array
+        */
+
+        let students = ["Rahul", "Anita", "John", "Sara"];
+
+
+        /*
+            STEP 2: SELECT DOM ELEMENTS
+        */
+
+        const tableBody = document.getElementById("tableBody");
+        const searchInput = document.getElementById("searchInput");
+        const nameInput = document.getElementById("nameInput");
+        const addBtn = document.getElementById("addBtn");
+
+
+        /*
+            STEP 3: RENDER FUNCTION
+            ----------------------
+            Converts data → DOM
+        */
+
+        function renderTable(data) {
+            tableBody.innerHTML = "";
+
+            data.forEach((name, index) => {
+                const tr = document.createElement("tr");
+                const nameTd = document.createElement("td");
+                const actionTd = document.createElement("td");
+                const deleteBtn = document.createElement("button");
+
+                nameTd.textContent = name;
+                deleteBtn.textContent = "Delete";
+
+                // Delete row
+                deleteBtn.addEventListener("click", function () {
+                    students.splice(index, 1);
+                    renderTable(students);
+                });
+
+                actionTd.appendChild(deleteBtn);
+                tr.appendChild(nameTd);
+                tr.appendChild(actionTd);
+                tableBody.appendChild(tr);
+            });
+        }
+
+
+        /*
+            STEP 4: SEARCH FUNCTIONALITY
+        */
+
+        searchInput.addEventListener("input", function () {
+            const searchValue = this.value.toLowerCase();
+
+            const filteredStudents = students.filter(name =>
+                name.toLowerCase().includes(searchValue)
+            );
+
+            renderTable(filteredStudents);
+        });
+
+
+        /*
+            STEP 5: ADD STUDENT
+        */
+
+        addBtn.addEventListener("click", function () {
+            const newName = nameInput.value.trim();
+
+            if (newName === "") {
+                alert("Enter a name");
+                return;
+            }
+
+            students.push(newName);
+            nameInput.value = "";
+            renderTable(students);
+        });
+
+
+        /*
+            STEP 6: INITIAL RENDER
+        */
+
+        renderTable(students);
+    </script>
+
+</body>
+</html>

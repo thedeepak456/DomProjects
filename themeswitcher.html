@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Theme Switcher</title>
+
+    <!-- =======================
+         INTERNAL CSS (UI DESIGN)
+         ======================= -->
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Default (Light Theme) */
+        body {
+            min-height: 100vh;
+            background: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main card */
+        .card {
+            background: white;
+            padding: 25px;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        .card h1 {
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: gray;
+        }
+
+        /* Theme buttons */
+        .themes {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .theme-btn {
+            flex: 1;
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .light { background: #999; }
+        .dark { background: #333; }
+        .blue { background: #4a90e2; }
+
+        /* =======================
+           DARK THEME
+           ======================= */
+        body.dark-theme {
+            background: #121212;
+            color: #f4f4f4;
+        }
+
+        body.dark-theme .card {
+            background: #1e1e1e;
+        }
+
+        body.dark-theme p {
+            color: #bbb;
+        }
+
+        /* =======================
+           BLUE THEME
+           ======================= */
+        body.blue-theme {
+            background: #4a90e2;
+            color: white;
+        }
+
+        body.blue-theme .card {
+            background: white;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =======================
+         HTML STRUCTURE
+         ======================= -->
+    <div class="card">
+        <h1>Theme Switcher</h1>
+        <p>Click a button to change the theme</p>
+
+        <div class="themes">
+            <button class="theme-btn light" data-theme="light">Light</button>
+            <button class="theme-btn dark" data-theme="dark">Dark</button>
+            <button class="theme-btn blue" data-theme="blue">Blue</button>
+        </div>
+    </div>
+
+
+    <!-- =======================
+         INTERNAL JAVASCRIPT
+         ======================= -->
+    <script>
+        /*
+            STEP 1: SELECT ALL THEME BUTTONS
+            --------------------------------
+            querySelectorAll returns a NodeList
+        */
+
+        const themeButtons = document.querySelectorAll(".theme-btn");
+
+
+        /*
+            STEP 2: APPLY SAVED THEME ON PAGE LOAD
+            -------------------------------------
+            If user selected a theme before,
+            we load it from localStorage.
+        */
+
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        }
+
+
+        /*
+            STEP 3: ADD EVENT LISTENER TO EACH BUTTON
+            ----------------------------------------
+        */
+
+        themeButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const selectedTheme = this.dataset.theme;
+                applyTheme(selectedTheme);
+            });
+        });
+
+
+        /*
+            STEP 4: MAIN FUNCTION
+            --------------------
+            This function handles:
+            - Removing old theme
+            - Adding new theme
+            - Saving theme
+        */
+
+        function applyTheme(theme) {
+
+            // Remove all theme classes first
+            document.body.classList.remove(
+                "dark-theme",
+                "blue-theme"
+            );
+
+            // Apply selected theme
+            if (theme === "dark") {
+                document.body.classList.add("dark-theme");
+            } 
+            else if (theme === "blue") {
+                document.body.classList.add("blue-theme");
+            }
+
+            // Save theme in browser
+            localStorage.setItem("theme", theme);
+        }
+    </script>
+
+</body>
+</html>

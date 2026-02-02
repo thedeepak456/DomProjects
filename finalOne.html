@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes App</title>
+
+    <!-- =======================
+         INTERNAL CSS (UI DESIGN)
+         ======================= -->
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .notes-app {
+            background: white;
+            width: 400px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 70px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .note {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .note-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+
+        .note-actions button {
+            width: 48%;
+            background: #4caf50;
+        }
+
+        .note-actions .delete {
+            background: #f44336;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =======================
+         HTML STRUCTURE
+         ======================= -->
+    <div class="notes-app">
+        <h2>My Notes</h2>
+
+        <textarea id="noteInput" placeholder="Write a note..."></textarea>
+        <button id="addNoteBtn">Add Note</button>
+
+        <div id="notesContainer"></div>
+    </div>
+
+    <!-- =======================
+         INTERNAL JAVASCRIPT
+         ======================= -->
+    <script>
+        /*
+            STEP 1: SELECT DOM ELEMENTS
+        */
+
+        const noteInput = document.getElementById("noteInput");
+        const addNoteBtn = document.getElementById("addNoteBtn");
+        const notesContainer = document.getElementById("notesContainer");
+
+
+        /*
+            STEP 2: LOAD NOTES FROM localStorage
+            -----------------------------------
+            If no notes exist, use empty array
+        */
+
+        let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+
+        /*
+            STEP 3: RENDER NOTES
+            -------------------
+            Data → DOM
+        */
+
+        function renderNotes() {
+            notesContainer.innerHTML = "";
+
+            notes.forEach((noteText, index) => {
+                const noteDiv = document.createElement("div");
+                noteDiv.className = "note";
+
+                const p = document.createElement("p");
+                p.textContent = noteText;
+
+                const actions = document.createElement("div");
+                actions.className = "note-actions";
+
+                const editBtn = document.createElement("button");
+                editBtn.textContent = "Edit";
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+                deleteBtn.classList.add("delete");
+
+                /*
+                    EDIT NOTE
+                */
+                editBtn.addEventListener("click", function () {
+                    const updatedNote = prompt("Edit your note", noteText);
+                    if (updatedNote !== null && updatedNote.trim() !== "") {
+                        notes[index] = updatedNote;
+                        saveAndRender();
+                    }
+                });
+
+                /*
+                    DELETE NOTE
+                */
+                deleteBtn.addEventListener("click", function () {
+                    notes.splice(index, 1);
+                    saveAndRender();
+                });
+
+                actions.appendChild(editBtn);
+                actions.appendChild(deleteBtn);
+
+                noteDiv.appendChild(p);
+                noteDiv.appendChild(actions);
+
+                notesContainer.appendChild(noteDiv);
+            });
+        }
+
+
+        /*
+            STEP 4: SAVE & RE-RENDER
+        */
+
+        function saveAndRender() {
+            localStorage.setItem("notes", JSON.stringify(notes));
+            renderNotes();
+        }
+
+
+        /*
+            STEP 5: ADD NOTE
+        */
+
+        addNoteBtn.addEventListener("click", function () {
+            const noteText = noteInput.value.trim();
+
+            if (noteText === "") {
+                alert("Write something first!");
+                return;
+            }
+
+            notes.push(noteText);
+            noteInput.value = "";
+            saveAndRender();
+        });
+
+
+        /*
+            STEP 6: INITIAL LOAD
+        */
+
+        renderNotes();
+    </script>
+
+</body>
+</html>

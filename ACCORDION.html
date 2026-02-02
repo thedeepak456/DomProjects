@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accordion FAQ</title>
+
+    <!-- =======================
+         INTERNAL CSS
+         ======================= -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .accordion {
+            width: 360px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 20px;
+        }
+
+        .accordion h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        /* Question */
+        .question {
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        /* Answer */
+        .answer {
+            display: none;
+            padding: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Active question */
+        .question.active {
+            background: #5563d6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =======================
+         HTML STRUCTURE
+         ======================= -->
+    <div class="accordion">
+        <h2>FAQ</h2>
+
+        <div class="question">What is the DOM?</div>
+        <div class="answer">DOM stands for Document Object Model.</div>
+
+        <div class="question">Why learn DOM?</div>
+        <div class="answer">It allows you to build interactive websites.</div>
+
+        <div class="question">Is JavaScript required?</div>
+        <div class="answer">Yes, JavaScript controls the DOM.</div>
+    </div>
+
+    <!-- =======================
+         INTERNAL JAVASCRIPT
+         ======================= -->
+    <script>
+        /*
+            STEP 1: SELECT ALL QUESTIONS
+        */
+
+        const questions = document.querySelectorAll(".question");
+
+        /*
+            STEP 2: LOOP THROUGH QUESTIONS
+        */
+
+        questions.forEach(question => {
+            question.addEventListener("click", function () {
+
+                /*
+                    STEP 3: CLOSE ALL ANSWERS
+                */
+
+                questions.forEach(q => {
+                    if (q !== this) {
+                        q.classList.remove("active");
+                        q.nextElementSibling.style.display = "none";
+                    }
+                });
+
+                /*
+                    STEP 4: TOGGLE CURRENT ANSWER
+                */
+
+                this.classList.toggle("active");
+
+                const answer = this.nextElementSibling;
+
+                if (this.classList.contains("active")) {
+                    answer.style.display = "block";
+                } else {
+                    answer.style.display = "none";
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
